@@ -38,6 +38,15 @@ export class UserRepository {
     const result = await User.destroy({ where: { id } });
     return result > 0;
   }
+
+  async findAll(limit = 100, offset = 0): Promise<User[]> {
+    return await User.findAll({
+      limit,
+      offset,
+      order: [['created_at', 'DESC']],
+    });
+  }
+
 }
 
 export const userRepository = new UserRepository();

@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import { connectDB } from './config/database';
 import routes from './routes';
 import { errorHandler } from './middleware/errorHandler';
+import { cronJobsService } from './services/cronJobs.service';
 
 dotenv.config();
 
@@ -31,10 +32,27 @@ app.use('/api/v1', routes);
 // Error handling
 app.use(errorHandler);
 
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received, shutting down gracefully...');
+  cronJobsService.stop();
+  process.exit(0);
+});
+
+process.on('SIGINT', () => {
+  console.log('SIGINT received, shutting down gracefully...');
+  cronJobsService.stop();
+  process.exit(0);
+});
+
 // Start server
 const startServer = async () => {
   try {
     await connectDB();
+
+    // Start cron jobs
+    cronJobsService.start();
+
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`📍 Environment: ${process.env.NODE_ENV}`);
