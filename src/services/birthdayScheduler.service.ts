@@ -5,6 +5,7 @@ import { User } from '../models/User';
 import { userRepository } from '../repositories/users.repository';
 import { birthdayMessageRepository } from '../repositories/birthdayMessages.repository';
 import { BirthdayMessage, MessageStatus } from '../models/BirthdayMessage';
+import { emailService } from './email.service';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -178,15 +179,23 @@ export class BirthdaySchedulerService {
   }
 
   private async sendBirthdayMessage(message: BirthdayMessage): Promise<void> {
-    const { first_name, last_name } = message.user_snapshot;
+    const { first_name, last_name, email } = message.user_snapshot;
     const fullName = `${first_name} ${last_name}`;
     
-    // TODO: Replace with actual API call
-    console.log(`🎉 Hey, ${fullName} it's your birthday!`);
+    const birthdayMessage = `🎉 Hey, ${fullName} it's your birthday!`;
+
+    try {
+      // Send message via email service
+      const result = await emailService.sendEmail(email, birthdayMessage);
     
-    // Simulate potential failure for testing
-    if (Math.random() < 0.05) {
-      throw new Error('Simulated API failure');
+      console.log(
+        `🎉 Birthday email sent to ${fullName} (${email}) - ` +
+        `Status: ${result.status}, Sent at: ${result.sentTime}`
+      );
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error(`❌ Failed to send birthday email to ${fullName} (${email}): ${errorMessage}`);
+      throw error;
     }
   }
 

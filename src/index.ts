@@ -6,6 +6,7 @@ import { connectDB } from './config/database';
 import routes from './routes';
 import { errorHandler } from './middleware/errorHandler';
 import { cronJobsService } from './services/cronJobs.service';
+import { emailService } from './services/email.service';
 
 dotenv.config();
 
@@ -49,6 +50,15 @@ process.on('SIGINT', () => {
 const startServer = async () => {
   try {
     await connectDB();
+
+    // Test email service connection on startup
+    console.log('[Startup] Testing email service connection...');
+    const emailReady = await emailService.testConnection();
+    if (emailReady) {
+      console.log('✅ Email service connected');
+    } else {
+      console.warn('⚠️ Email service not responding - messages will fail');
+    }
 
     // Start cron jobs
     cronJobsService.start();
