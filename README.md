@@ -281,4 +281,6 @@ birthday-reminder-api/
 
 ## 📄 Additional Note
 
-This project is a proof of concept (POC) for demonstration purposes.
+This project is a proof of concept (POC) for demonstration purposes. The following security features are intentionally **not implemented** but would be a consideration for production-grade development:
+
+- Authentication/Authorization (JWT, API keys, OAuth)
