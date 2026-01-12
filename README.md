@@ -10,6 +10,7 @@ A robust, timezone-aware birthday reminder system built with Node.js, TypeScript
 - **Race Condition Prevention**: Database-level unique constraints prevent duplicate messages
 - **Data Change Detection**: Validates user data hasn't changed since scheduling
 - **RESTful API**: Full CRUD operations for user management
+- **Docker Support**: Containerized deployment with Docker and Docker Compose
 
 ## 🏗️ Architecture
 
@@ -29,10 +30,22 @@ Routes → Controllers → Services → Repositories → Models
 - Node.js 20+
 - PostgreSQL 16+
 - Make (optional, for shortcuts)
+- Docker & Docker Compose (optional, for containerization)
 
 ## 🚀 Quick Start
 
-### Option 1: Using npm
+### Option 1: Using Docker
+
+```bash
+# Build and start the application
+make up
+```
+
+Server will be running at `http://localhost:3000`
+
+**Note**: Make sure your external PostgreSQL database is running and accessible at the host specified in your `.env` file.
+
+### Option 2: Using npm
 
 ```bash
 # Install dependencies
@@ -45,7 +58,7 @@ npm run db:migrate
 npm run dev
 ```
 
-### Option 2: Via makefile
+### Option 3: Via makefile (without Docker)
 
 ```bash
 # Install dependencies
@@ -154,10 +167,15 @@ The system runs these cron jobs automatically:
 
 ## 🛠️ Makefile Commands
 
+### General
+```bash
+make help            # Show list of available make commands
+```
+
 ### Development
 
 ```bash
-make install          # Install dependencies
+make install         # Install dependencies
 make dev             # Run development server
 make build           # Build TypeScript
 make start           # Start production server
@@ -167,8 +185,20 @@ make clean           # Clean build artifacts
 ### Database
 
 ```bash
-make db-migrate       # Run migrations
-make db-rollback      # Rollback last migration
+make db-migrate      # Run migrations
+make db-rollback     # Rollback last migration
+```
+
+### Docker Operations
+
+```bash
+make docker-build    # Build Docker image
+make docker-up       # Start service
+make docker-down     # Stop service
+make docker-restart  # Restart service
+make docker-clean    # Stop service and remove volume
+make docker-rebuild  # Rebuild and restart service
+make docker-dev      # Start service in development mode
 ```
 
 ## 🔒 How It Handles Different Scenarios
