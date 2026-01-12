@@ -31,12 +31,12 @@ module.exports = {
       location: {
         type: Sequelize.STRING(255),
         allowNull: true,
-        comment: 'Human-readable location (e.g., "New York, NY")'
+        comment: 'Human-readable location (e.g., "Jakarta")'
       },
       timezone: {
         type: Sequelize.STRING(50),
         allowNull: false,
-        comment: 'IANA timezone identifier (e.g., "America/New_York")'
+        comment: 'IANA timezone identifier (e.g., "Asia/Jakarta")'
       },
       created_at: {
         type: Sequelize.DATE,

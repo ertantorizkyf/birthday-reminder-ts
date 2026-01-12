@@ -7,13 +7,13 @@ export class CronJobsService {
   start(): void {
     console.log('[Cron] Starting scheduled jobs...');
 
-    // Schedule birthday messages every hour
+    // Schedule birthday messages 6 hours
     const scheduleJob = cron.schedule('0 */6 * * *', async () => {
       console.log('[Cron] Running birthday scheduler...');
       await birthdaySchedulerService.scheduleAllBirthdayMessages();
     });
 
-    // Schedule pending messages every 15 minutes
+    // Schedule pending messages every minute
     const processJob = cron.schedule('* * * * *', async () => {
       console.log('[Cron] Processing pending messages...');
       await birthdaySchedulerService.processPendingMessages();
